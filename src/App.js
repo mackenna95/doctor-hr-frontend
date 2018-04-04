@@ -4,11 +4,8 @@ import axios from 'axios'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
+import TableEx from './Table.js'
 
-// want to use gunicorn (rather than flask) deployed on the vcm
-// mongoDB
-
-// eslint-disable-next-line
 const style = {
         "margin": "20px",
         "color": "black",
@@ -21,31 +18,39 @@ class App extends React.Component {
             "data": ["Nothing yet"],
             dataSource: [],
             inputValue: ["No User Input"],
+            "tableData": [],
+            "heart_rate": [],
         };
     }
 
-// http://vcm-3587.vm.duke.edu:5000/api/heart_rate/suyash@suyashkumar.com
     getData = () => {
         axios.get("http://vcm-3587.vm.duke.edu:5000/api/heart_rate/" + this.state.inputValue).then( (response) => {
             console.log(response);
             console.log(response.status); // this is equivalent to response["status"]
             this.setState(response.data);
         });
+        this.CreateTableData()
     }
     
-  updateInputValue = (evt) => {
-    this.setState({
-      inputValue: evt.target.value
-    });
-  }
+    updateInputValue = (evt) => {
+        this.setState({
+            inputValue: evt.target.value
+        });
+    }
 
-// could create a new array that is a tuple of the two values and then print that
-// new = hr.map(e) => {
-    // return(
-        //<raw>
-            //e
-        //</raw>
-    //}),
+    CreateTableData = () => {
+        var c = []
+        for (var i = 0; i < this.state.heart_rate.length; i++) {
+            c.push([this.state.heart_rate[i], this.state.date_time[i]]);
+        }
+        this.setState({
+            'tableData': c,
+        });
+        console.log(c);
+        console.log(this.state.tableData);
+    }
+
+
   render() {
     return (
       <div className="App">
@@ -68,8 +73,7 @@ class App extends React.Component {
                     Display Patient Heart Rate
                 </Button>
             </MuiThemeProvider>
-            {this.state.date_time}
-            {this.state.heart_rate}
+            <TableEx tableData={this.state.tableData} heart_rate={this.state.heart_rate} date_time={this.state.date_time}/>
           </div>
       </div>
     );

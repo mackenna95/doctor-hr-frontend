@@ -8,12 +8,12 @@ class TableEx extends React.Component {
 
     generateTableDataForLoop = () => {
       var prettyTableData = [];
-      
-      for (var i = 0; i < this.props.tableData.length; i++) {
+      console.log(this.props.heart_rate)
+      for (var i = 0; i < this.props.heart_rate.length; i++) {
           prettyTableData.push(
             <TableRow>
-                <TableCell> {this.props.tableData[i][0]} </TableCell>
-                <TableCell> {this.props.tableData[i][1]} </TableCell>
+                <TableCell> {this.props.heart_rate[i]} </TableCell>
+                <TableCell> {this.props.date_time[i]} </TableCell>
             </TableRow>
           );
       }
@@ -29,11 +29,13 @@ class TableEx extends React.Component {
             </TableRow>
             )
         });
+        
         return prettyTableData;
     }
     
   render() {
-    var prettyTableData = this.generateTableMap();
+    const { tableData, heart_rate, date_time } = this.props
+    var prettyTableData = this.generateTableDataForLoop();
     return (
         <div>
             <Table>
